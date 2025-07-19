@@ -1,0 +1,241 @@
+mode: rule
+allow-lan: true
+ipv6: true
+global-ua: clash.meta
+log-level: info
+mixed-port: 7890
+unified-delay: true
+tcp-concurrent: true
+disable-keep-alive: false
+keep-alive-interval: 30
+interface-name: Meta
+find-process-mode: strict
+global-client-fingerprint: chrome
+external-controller: 127.0.0.1:9090
+external-ui: ui
+external-ui-url: "https://ghfast.top/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
+
+geodata-mode: false
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 24
+geox-url:
+  geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+  asn: "https://github.com/xishang0128/geoip/releases/download/latest/GeoLite2-ASN.mmdb"
+  proxy: Proxy
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+sniffer:
+  enable: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+
+dns:
+  enable: true
+  ipv6: true
+  prefer-h3: true
+  listen: 0.0.0.0:1053
+  respect-rules: false
+  use-hosts: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+    - tls://1.12.12.12
+    - 119.29.29.29
+    - 120.53.53.53
+    - 114.114.114.114
+    - 223.5.5.5
+    - 223.6.6.6
+  nameserver:
+    - tls://1.1.1.1
+    - tls://8.8.8.8
+    - 'https://cloudflare-dns.com/dns-query#h3=true'
+    - 'https://dns.google/dns-query#h3=true'
+  nameserver-policy:
+    geosite:cn: 
+      - 'https://dns.pub/dns-query#h3=true'
+      - 'https://dns.alidns.com/dns-query#h3=true'
+tun:
+  enable: true
+  stack: mixed
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  auto-route: true
+  auto-redirect: true
+  strict-route: true
+  auto-detect-interface: true
+
+proxy-providers:
+  中国国际机场:
+    url: ""
+    type: http
+    interval: 25200
+    health-check:
+      enable: true
+      interval: 1800
+      url: "https://www.gstatic.com/generate_204"
+
+u: &u
+  type: url-test
+  interval: 1800
+  # tolerance: 50
+  # lazy: true
+  url: "https://www.gstatic.com/generate_204"
+
+pr: &pr
+  type: select
+  proxies: [Hongkong, Japan, Singapore, Taiwan, Korea, America, CN, Other, DIRECT]
+
+proxies:
+  - name: "dns-out"
+    type: dns
+ # - name: "DIRECT"
+   # type: direct
+   # udp: true
+
+proxy-groups:
+  - name: Proxy
+    <<: *pr
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Proxy.png"
+  - name: Google
+    <<: *pr
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google_Search.png"
+  - name: YouTube
+    <<: *pr
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png"
+  - name: Spotify
+    <<: *pr
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png"
+  - name: GitHub
+    <<: *pr
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/GitHub.png"
+  - name: China
+    <<: *pr
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/China_Map.png"
+
+  # 地区
+  - name: Hongkong
+    <<: *u
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png"
+    include-all: true
+    filter: "(?i)(🇭🇰|香港|hk|HK|HongKong|Hong Kong)"
+
+  - name: Japan
+    <<: *u
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Japan.png"
+    include-all: true
+    filter: "(?i)(🇯🇵|日本|jp|JP|Japan)"
+
+  - name: Singapore
+    <<: *u
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Singapore.png"
+    include-all: true
+    filter: "(?i)(🇸🇬|新加坡|狮城|sg|SG|Singapore)"
+
+  - name: Taiwan
+    <<: *u
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Taiwan.png"
+    include-all: true
+    filter: "(?i)(🇼🇸|台湾|tw|TW|Taiwan)"
+
+  - name: Korea
+    <<: *u
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Korea.png"
+    include-all: true
+    filter: "(?i)(🇰🇷|韩国|KR|Korea)"
+
+  - name: America
+    <<: *u
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States.png"
+    include-all: true
+    filter: "(?i)(🇺🇲|美国|USA|America|United States)"
+    
+  - name: CN
+    <<: *u
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/China.png"
+    include-all: true
+    filter: "(?i)(🇨🇳|徐|广|浙|镇|武|济)"
+
+  - name: Other
+    type: select
+    #<<: *u
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Global.png"
+    include-all: true
+    filter: "(?i)^(?!.*(?:港|HK|HongKong|Hong Kong|台|TW|日|JP|新|SG|韩|KR|美|United States|US|徐|广|浙|镇|武|济|直连|dns-out)).*"
+
+# 规则
+rules:
+  - RULE-SET,Advertising_Domain,REJECT
+  - DST-PORT,53,dns-out
+  - AND,(AND,(DST-PORT,443),(NETWORK,UDP)),(NOT,((GEOSITE,cn))),REJECT # 禁用quic(不包括国内)
+  - RULE-SET,github,GitHub
+  - RULE-SET,youtube,YouTube
+  - RULE-SET,spotify,Spotify
+  - RULE-SET,google,Google
+  - RULE-SET,google_ip,Google,no-resolve
+  - RULE-SET,geolocation-!cn,Proxy
+  - RULE-SET,ChinaMax_Domain,China
+  - RULE-SET,ChinaMax_IP,China,no-resolve
+  - RULE-SET,private,China,no-resolve
+  
+  - GEOSITE,CN,China
+  - GEOIP,CN,China,no-resolve
+  - MATCH,Proxy
+
+rule-anchor:
+  ip: &ip
+    type: http
+    interval: 86400
+    proxy: Proxy
+    behavior: ipcidr
+    format: yaml
+  domain: &domain
+    type: http
+    interval: 86400
+    proxy: Proxy
+    behavior: domain
+    format: yaml
+# 规则集
+rule-providers:
+  Advertising_Domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads-all.yaml"
+  ChinaMax_Domain:
+    <<: *domain
+    url: "https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Clash/ChinaMax/ChinaMax_Domain.yaml"
+  private:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.yaml"
+  google:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.yaml"
+  github:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.yaml"
+  spotify:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.yaml"
+  youtube:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.yaml"
+  geolocation-!cn:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.yaml"
+  ChinaMax_IP:
+    <<: *ip
+    url: "https://github.com/blackmatrix7/ios_rule_script/raw/refs/heads/master/rule/Clash/ChinaMax/ChinaMax_IP.yaml"
+  google_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.yaml"
+
