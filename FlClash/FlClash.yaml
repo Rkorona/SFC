@@ -83,12 +83,12 @@ proxy-providers:
     interval: 25200
     health-check:
       enable: true
-      interval: 1800
+      interval: 3600
       url: "https://www.gstatic.com/generate_204"
 
 u: &u
   type: url-test
-  interval: 1800
+  interval: 3600
   # tolerance: 50
   # lazy: true
   url: "https://www.gstatic.com/generate_204"
